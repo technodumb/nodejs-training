@@ -14,7 +14,7 @@ class Employee extends AbstractEntity {
     age: Number;
 
     @OneToOne(() => Address, (address) => address.employee, {
-        cascade: ["soft-remove"],
+        cascade: true,
         onDelete: "CASCADE",
     })
     address: Address;

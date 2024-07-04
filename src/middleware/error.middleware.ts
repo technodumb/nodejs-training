@@ -1,16 +1,25 @@
 import { NextFunction, Request, Response } from "express";
 import HttpException from "../exception/http.exception";
 
-const errorLoggerMiddleware = (
-    err: HttpException,
+const errorMiddleware = (
+    error: Error,
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    const status = err.status || 500;
-    const message = err.message || "Something went wrong";
-    console.error(err.stack);
-    res.status(status).send(message);
+    try {
+        if (error instanceof HttpException) {
+            const status: number = error.status || 500;
+            const message: string = error.message || "Something went wrong";
+            let respbody = { message: message };
+            res.status(status).json(respbody);
+        } else {
+            console.error(error.stack);
+            res.status(500).send({ error: error.message });
+        }
+    } catch (error) {
+        next(error);
+    }
 };
 
-export default errorLoggerMiddleware;
+export default errorMiddleware;

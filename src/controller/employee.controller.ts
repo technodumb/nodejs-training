@@ -51,28 +51,6 @@ export class EmployeeController {
     ) => {
         const { name, email, age, address } = req.body;
         try {
-            if (
-                name === undefined ||
-                email === undefined ||
-                age === undefined ||
-                address === undefined
-            ) {
-                throw new HttpException(
-                    400,
-                    "Provide 'name', 'email', 'age' and 'address'"
-                );
-                // res.status(400).send(
-                //     "Provide 'name', 'email', 'age' and 'address. Address should contain line1 and pincode.'"
-                // );
-                // return;
-            }
-            if (address.line1 === undefined || address.pincode === undefined) {
-                throw new HttpException(
-                    400,
-                    "Address should contain 'line1' and 'pincode'"
-                );
-            }
-
             const savedEmployee = await this.employeeService.createEmployee(
                 email,
                 name,
