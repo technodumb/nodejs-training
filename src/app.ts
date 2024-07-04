@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import employeeRouter from "./routes/employee.routes";
 import loggerMiddleware from "./middleware/logger.middleware";
-import dataSource from "./db/data-source";
+import dataSource from "./db/data-source.db";
 
 const server = express();
 server.use(loggerMiddleware);

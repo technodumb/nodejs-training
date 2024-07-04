@@ -1,5 +1,5 @@
 import { EmployeeController } from "../controller/employee.controller";
-import dataSource from "../db/data-source";
+import dataSource from "../db/data-source.db";
 import Employee from "../entity/employee.entity";
 import EmployeeRepository from "../repository/employee.repository";
 import { EmployeeService } from "../service/employee.service";

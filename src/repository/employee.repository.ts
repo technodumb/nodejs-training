@@ -1,5 +1,5 @@
 import { DataSource, Repository } from "typeorm";
-import dataSource from "../db/data-source";
+import dataSource from "../db/data-source.db";
 import Employee from "../entity/employee.entity";
 
 class EmployeeRepository {
