@@ -1,5 +1,14 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import {
+    IsEmail,
+    IsNotEmpty,
+    IsNumber,
+    IsString,
+    ValidateNested,
+} from "class-validator";
 import Address from "../entity/address.entity";
+import { Type } from "class-transformer";
+import CreateAddressDto from "./address.dto";
+import "reflect-metadata";
 
 class CreateEmployeeDto {
     @IsNotEmpty()
@@ -16,7 +25,9 @@ class CreateEmployeeDto {
     age: Number;
 
     @IsNotEmpty()
-    address: Address;
+    @ValidateNested({ each: true })
+    @Type(() => CreateAddressDto)
+    address: CreateAddressDto;
 }
 
 export default CreateEmployeeDto;
