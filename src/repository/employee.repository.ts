@@ -33,6 +33,10 @@ class EmployeeRepository {
     async delete(filter: Partial<Employee>): Promise<void> {
         await this.employeeRepository.delete(filter);
     }
+
+    async softRemove(filter: Partial<Employee>) {
+        await this.employeeRepository.softRemove(filter, );
+    }
 }
 
 export default EmployeeRepository;

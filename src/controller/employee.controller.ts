@@ -1,5 +1,6 @@
+import HttpException from "../exception/http.exception";
 import { EmployeeService } from "../service/employee.service";
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 
 export class EmployeeController {
     public router: Router;
@@ -18,32 +19,70 @@ export class EmployeeController {
         res.status(200).send(employees);
     };
 
-    public getEmployeeByID = async (req: Request, res: Response) => {
-        const employeeID = parseInt(req.params.employeeID);
-        if (Number.isNaN(employeeID)) {
-            res.status(400).send("Employee ID must be a number");
-            return;
+    public getEmployeeByID = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+        try {
+            const employeeID = parseInt(req.params.employeeID);
+            if (!Number.isInteger(employeeID)) {
+                throw new HttpException(400, "ID is not an integer!");
+            }
+            const employee = await this.employeeService.getEmployeeByID(
+                employeeID
+            );
+            if (!employee) {
+                throw new HttpException(
+                    404,
+                    `Employee with id: ${employeeID} not found`
+                );
+            }
+            res.status(200).send(employee);
+        } catch (error) {
+            next(error);
         }
-        const employee = await this.employeeService.getEmployeeByID(employeeID);
-        if (!employee) {
-            res.status(404).send("Employee not found.");
-            return;
-        }
-        res.status(200).send(employee);
     };
 
-    public createEmployee = async (req: Request, res: Response) => {
-        const { name, email } = req.body;
-        if (name === undefined || email === undefined) {
-            res.status(400).send("Provide 'name' and 'email'");
-            return;
-        }
+    public createEmployee = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+        const { name, email, age, address } = req.body;
+        try {
+            if (
+                name === undefined ||
+                email === undefined ||
+                age === undefined ||
+                address === undefined
+            ) {
+                throw new HttpException(
+                    400,
+                    "Provide 'name', 'email', 'age' and 'address'"
+                );
+                // res.status(400).send(
+                //     "Provide 'name', 'email', 'age' and 'address. Address should contain line1 and pincode.'"
+                // );
+                // return;
+            }
+            if (address.line1 === undefined || address.pincode === undefined) {
+                throw new HttpException(
+                    400,
+                    "Address should contain 'line1' and 'pincode'"
+                );
+            }
 
-        const savedEmployee = await this.employeeService.createEmployee(
-            email,
-            name
-        );
-        res.status(201).send(savedEmployee);
+            const savedEmployee = await this.employeeService.createEmployee(
+                email,
+                name,
+                age,
+                address
+            );
+            res.status(201).send(savedEmployee);
+        } catch (error) {
+            next(error);
+        }
     };
 
     public updateEmployeeByID = async (req: Request, res: Response) => {

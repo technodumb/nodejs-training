@@ -1,13 +1,15 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import employeeRouter from "./routes/employee.routes";
 import loggerMiddleware from "./middleware/logger.middleware";
 import dataSource from "./db/data-source.db";
+import errorLoggerMiddleware from "./middleware/error.middleware";
 
 const server = express();
 server.use(loggerMiddleware);
 server.use(bodyParser.json());
 server.use("/employees", employeeRouter);
+server.use(errorLoggerMiddleware);
 
 server.get("/", (req, res) => {
     console.log(req.url);
