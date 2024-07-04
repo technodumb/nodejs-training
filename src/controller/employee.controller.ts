@@ -1,6 +1,10 @@
+import { plainToInstance } from "class-transformer";
 import HttpException from "../exception/http.exception";
 import { EmployeeService } from "../service/employee.service";
 import { Router, Request, Response, NextFunction } from "express";
+import CreateEmployeeData from "../dto/employee.dto";
+import CreateEmployeeDto from "../dto/employee.dto";
+import { validate } from "class-validator";
 
 export class EmployeeController {
     public router: Router;
@@ -51,11 +55,19 @@ export class EmployeeController {
     ) => {
         const { name, email, age, address } = req.body;
         try {
+            const employeeDto = plainToInstance(CreateEmployeeDto, req.body);
+            const errors = await validate(employeeDto);
+
+            if (errors.length) {
+                const errorString = JSON.stringify(errors);
+                console.log(errorString);
+                throw new HttpException(400, errorString);
+            }
             const savedEmployee = await this.employeeService.createEmployee(
-                email,
-                name,
-                age,
-                address
+                employeeDto.email,
+                employeeDto.name,
+                employeeDto.age,
+                employeeDto.address
             );
             res.status(201).send(savedEmployee);
         } catch (error) {

@@ -21,29 +21,6 @@ export class EmployeeService {
         age: Number,
         address: Address
     ) => {
-        if (
-            name === undefined ||
-            email === undefined ||
-            age === undefined ||
-            address === undefined
-        ) {
-            throw new HttpException(
-                400,
-                "Provide 'name', 'email', 'age' and 'address'"
-            );
-        }
-        if (address.line1 === undefined || address.pincode === undefined) {
-            throw new HttpException(
-                400,
-                "Address should contain 'line1' and 'pincode'"
-            );
-        }
-
-        const emailFormat = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        if (!email.match(emailFormat)) {
-            throw new HttpException(400, "Invalid email format");
-        }
-
         const newEmployee = new Employee();
         const newAddress = new Address();
         newEmployee.name = name;
