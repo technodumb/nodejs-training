@@ -4,6 +4,7 @@
         "esModuleInterop": true,
         "target": "es6",
         "sourceMap": true,
+        "rootDir": "./",
         "outDir": "dist",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true

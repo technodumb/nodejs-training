@@ -10,7 +10,7 @@ import {
 @Entity()
 class Employee {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: Number;
 
     @Column()
     email: String;
@@ -27,13 +27,5 @@ class Employee {
     @DeleteDateColumn()
     deletedAt: Date;
 }
-
-// class Employee {
-//     id: number;
-//     name: string;
-//     email: string;
-//     createdAt: Date;
-//     updatedAt: Date;
-// }
 
 export default Employee;
