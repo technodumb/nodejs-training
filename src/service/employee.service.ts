@@ -3,6 +3,11 @@ import Address from "../entity/address.entity";
 import Employee from "../entity/employee.entity";
 import HttpException from "../exception/http.exception";
 import EmployeeRepository from "../repository/employee.repository";
+import { Role } from "../utils/role.enum";
+import bcrypt from "bcrypt";
+import jsonwebtoken from "jsonwebtoken";
+import { jwtPayload } from "../utils/jwtPayload";
+import { JWT_SECRET, JWT_VALIDITY } from "../utils/constants";
 
 export class EmployeeService {
     constructor(private employeeRepository: EmployeeRepository) {}
@@ -25,9 +30,11 @@ export class EmployeeService {
     };
 
     createEmployee = async (
-        email: String,
-        name: String,
+        email: string,
+        name: string,
         age: Number,
+        password: string,
+        role: Role,
         address: CreateAddressDto
     ) => {
         const newEmployee = new Employee();
@@ -35,16 +42,19 @@ export class EmployeeService {
         newEmployee.name = name;
         newEmployee.email = email;
         newEmployee.age = age;
+        newEmployee.role = role;
+        newEmployee.password = password ? await bcrypt.hash(password, 10) : "";
         newAddress.line1 = address.line1;
         newAddress.pincode = address.pincode;
         newEmployee.address = newAddress;
+
         return this.employeeRepository.save(newEmployee);
     };
 
     updateEmployeeByID = async (
         id: Number,
-        email: String,
-        name: String,
+        email: string,
+        name: string,
         age: Number,
         address: CreateAddressDto
     ) => {
@@ -65,5 +75,31 @@ export class EmployeeService {
     deleteEmployeeByID = async (employeeID: Number) => {
         const employee = await this.getEmployeeByID(employeeID);
         return this.employeeRepository.softRemove(employee);
+    };
+
+    loginEmployee = async (email: string, password: string) => {
+        const employee = await this.employeeRepository.findOneBy({ email });
+
+        if (!employee) {
+            throw new HttpException(403, "Incorrect Username or Password");
+        }
+
+        const result = await bcrypt.compare(password, employee.password);
+        if (!result) {
+            console.log(employee.password, password);
+            throw new HttpException(403, "Incorrect Username or Password");
+        }
+
+        const payload: jwtPayload = {
+            name: employee.name,
+            email: employee.email,
+            role: employee.role,
+        };
+
+        const token = jsonwebtoken.sign(payload, JWT_SECRET, {
+            expiresIn: JWT_VALIDITY,
+        });
+
+        return { token };
     };
 }

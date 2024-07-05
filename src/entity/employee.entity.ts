@@ -6,10 +6,10 @@ import { Role } from "../utils/role.enum";
 @Entity()
 class Employee extends AbstractEntity {
     @Column()
-    email: String;
+    email: string;
 
     @Column()
-    name: String;
+    name: string;
 
     @Column()
     age: Number;
@@ -21,7 +21,7 @@ class Employee extends AbstractEntity {
     address: Address;
 
     @Column({ nullable: true })
-    password: String;
+    password: string;
 
     @Column({ nullable: true })
     role: Role;

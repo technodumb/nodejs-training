@@ -1,5 +1,6 @@
 import {
     IsEmail,
+    IsEnum,
     IsNotEmpty,
     IsNumber,
     IsOptional,
@@ -15,12 +16,12 @@ import { Role } from "../utils/role.enum";
 class CreateEmployeeDto {
     @IsNotEmpty()
     @IsString()
-    name: String;
+    name: string;
 
     @IsNotEmpty()
     @IsString()
     @IsEmail()
-    email: String;
+    email: string;
 
     @IsNotEmpty()
     @IsNumber()
@@ -36,19 +37,19 @@ class CreateEmployeeDto {
     password: string;
 
     @IsNotEmpty()
-    @IsString()
+    @IsEnum(Role)
     role: Role;
 }
 
 class UpdateEmployeeDto {
     @IsOptional()
     @IsString()
-    name: String;
+    name: string;
 
     @IsOptional()
     @IsString()
     @IsEmail()
-    email: String;
+    email: string;
 
     @IsOptional()
     @IsNumber()
