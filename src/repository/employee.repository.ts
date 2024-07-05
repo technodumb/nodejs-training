@@ -5,11 +5,12 @@ import Employee from "../entity/employee.entity";
 class EmployeeRepository {
     // private dataSource: DataSource;
     constructor(private employeeRepository: Repository<Employee>) {}
-
+    
     async find(): Promise<Employee[]> {
         // const employeeRepository = this.dataSource.getRepository(Employee);
         return this.employeeRepository.find({
-            relations: ["address"],
+            // relations: ["address"],
+            relations: { address: true }, 
         });
     }
 
@@ -17,7 +18,8 @@ class EmployeeRepository {
         // const employeeRepository = this.dataSource.getRepository(Employee);
         return this.employeeRepository.findOne({
             where: filter,
-            relations: ["address"],
+            // relations: ["address"],
+            relations: { address: true },
         });
     }
 

@@ -10,6 +10,7 @@ import {
 import { Type } from "class-transformer";
 import "reflect-metadata";
 import { CreateAddressDto, UpdateAddressDto } from "./address.dto";
+import { Role } from "../utils/role.enum";
 
 class CreateEmployeeDto {
     @IsNotEmpty()
@@ -29,6 +30,14 @@ class CreateEmployeeDto {
     @ValidateNested({ each: true })
     @Type(() => CreateAddressDto)
     address: CreateAddressDto;
+
+    @IsNotEmpty()
+    @IsString()
+    password: string;
+
+    @IsNotEmpty()
+    @IsString()
+    role: Role;
 }
 
 class UpdateEmployeeDto {
