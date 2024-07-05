@@ -16,5 +16,3 @@ class Address extends AbstractEntity {
 }
 
 export default Address;
-
-

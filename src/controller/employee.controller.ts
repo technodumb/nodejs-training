@@ -2,14 +2,13 @@ import { plainToInstance } from "class-transformer";
 import HttpException from "../exception/http.exception";
 import { EmployeeService } from "../service/employee.service";
 import { Router, Request, Response, NextFunction } from "express";
-import CreateEmployeeData from "../dto/employee.dto";
-import CreateEmployeeDto from "../dto/employee.dto";
+import { CreateEmployeeDto, UpdateEmployeeDto } from "../dto/employee.dto";
 import { validate } from "class-validator";
+import { UpdateDateColumn } from "typeorm";
 
 export class EmployeeController {
     public router: Router;
     constructor(private employeeService: EmployeeService) {
-        // this.employeeService = new EmployeeService();
         this.router = Router();
 
         this.router.get("/", this.getAllEmployees);
@@ -29,19 +28,14 @@ export class EmployeeController {
         next: NextFunction
     ) => {
         try {
-            const employeeID = parseInt(req.params.employeeID);
+            const employeeID = Number(req.params.employeeID);
             if (!Number.isInteger(employeeID)) {
                 throw new HttpException(400, "ID is not an integer!");
             }
             const employee = await this.employeeService.getEmployeeByID(
                 employeeID
             );
-            if (!employee) {
-                throw new HttpException(
-                    404,
-                    `Employee with id: ${employeeID} not found`
-                );
-            }
+
             res.status(200).send(employee);
         } catch (error) {
             next(error);
@@ -53,15 +47,13 @@ export class EmployeeController {
         res: Response,
         next: NextFunction
     ) => {
-        const { name, email, age, address } = req.body;
         try {
             const employeeDto = plainToInstance(CreateEmployeeDto, req.body);
             const errors = await validate(employeeDto);
 
             if (errors.length) {
-                const errorString = JSON.stringify(errors);
-                console.log(errorString);
-                throw new HttpException(400, errorString);
+                const errorString = "Validation Failed!";
+                throw new HttpException(400, errorString, errors);
             }
             const savedEmployee = await this.employeeService.createEmployee(
                 employeeDto.email,
@@ -75,25 +67,40 @@ export class EmployeeController {
         }
     };
 
-    public updateEmployeeByID = async (req: Request, res: Response) => {
-        // const employees = await this.employeeService.getAllEmployees();
-        const { name, email } = req.body;
-        const employeeID = Number(req.params.employeeID);
+    public updateEmployeeByID = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
         try {
+            const employeeID = Number(req.params.employeeID);
+            if (!Number.isInteger(employeeID)) {
+                throw new HttpException(400, "ID is not an integer!");
+            }
+            const employeeDto = plainToInstance(UpdateEmployeeDto, req.body);
+            const errors = await validate(employeeDto);
+            if (errors.length) {
+                const errorString = "Validation Failed!";
+                throw new HttpException(400, errorString, errors);
+            }
             const updatedEmployee =
-                await this.employeeService.updateEmployeeByID(employeeID, {
-                    email,
-                    name,
-                });
+                await this.employeeService.updateEmployeeByID(
+                    employeeID,
+                    employeeDto.email,
+                    employeeDto.name,
+                    employeeDto.age,
+                    employeeDto.address
+                );
             res.status(200).send(updatedEmployee);
-        } catch (e) {
-            res.status(400).send(e.message);
+        } catch (error) {
+            next(error);
         }
-        // const employee = await
-        // res.status(200).send(employees);
     };
     public deleteEmployeeByID = async (req: Request, res: Response) => {
         const employeeID = Number(req.params.employeeID);
+        if (!Number.isInteger(employeeID)) {
+            throw new HttpException(400, "ID is not an integer!");
+        }
         const deleteStatus = await this.employeeService.deleteEmployeeByID(
             employeeID
         );

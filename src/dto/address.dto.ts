@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import {
+    IsNotEmpty,
+    IsNumberString,
+    IsOptional,
+    IsString,
+} from "class-validator";
 
 class CreateAddressDto {
     @IsNotEmpty()
@@ -6,8 +11,18 @@ class CreateAddressDto {
     line1: String;
 
     @IsNotEmpty()
-    @IsString()
+    @IsNumberString()
     pincode: String;
 }
 
-export default CreateAddressDto;
+class UpdateAddressDto {
+    @IsOptional()
+    @IsString()
+    line1: String;
+
+    @IsOptional()
+    @IsNumberString()
+    pincode: String;
+}
+
+export { CreateAddressDto, UpdateAddressDto };

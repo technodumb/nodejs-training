@@ -1,3 +1,4 @@
+import { CreateAddressDto } from "../dto/address.dto";
 import Address from "../entity/address.entity";
 import Employee from "../entity/employee.entity";
 import HttpException from "../exception/http.exception";
@@ -11,7 +12,15 @@ export class EmployeeService {
     };
 
     getEmployeeByID = async (employeeID: Number): Promise<Employee> => {
-        const employee = this.employeeRepository.findOneBy({ id: employeeID });
+        const employee = await this.employeeRepository.findOneBy({
+            id: employeeID,
+        });
+        if (!employee) {
+            throw new HttpException(
+                404,
+                `Employee with id: ${employeeID} not found`
+            );
+        }
         return employee;
     };
 
@@ -19,7 +28,7 @@ export class EmployeeService {
         email: String,
         name: String,
         age: Number,
-        address: Address
+        address: CreateAddressDto
     ) => {
         const newEmployee = new Employee();
         const newAddress = new Address();
@@ -34,22 +43,27 @@ export class EmployeeService {
 
     updateEmployeeByID = async (
         id: Number,
-        { email, name }: { email?: String; name?: String }
+        email: String,
+        name: String,
+        age: Number,
+        address: CreateAddressDto
     ) => {
         const existingEmployee = await this.getEmployeeByID(id);
-        if (!email && !name) {
-            console.log(email);
-            throw new Error("Nothing to update");
-        }
         existingEmployee.name = name;
         existingEmployee.email = email;
+        existingEmployee.age = age;
+        if (address) {
+            existingEmployee.address.line1 = address.line1;
+            existingEmployee.address.pincode = address.pincode;
+        }
+
+        console.log("errorString");
+
         return this.employeeRepository.save(existingEmployee);
     };
 
-    deleteEmployeeByID = async (employeeID: Number): Promise<String | void> => {
-        const employeeIsPresent = await this.employeeRepository.count({
-            id: employeeID,
-        });
-        return this.employeeRepository.softRemove({ id: employeeID });
+    deleteEmployeeByID = async (employeeID: Number) => {
+        const employee = await this.getEmployeeByID(employeeID);
+        return this.employeeRepository.softRemove(employee);
     };
 }

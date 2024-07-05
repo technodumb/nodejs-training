@@ -2,13 +2,14 @@ import {
     IsEmail,
     IsNotEmpty,
     IsNumber,
+    IsOptional,
     IsString,
     ValidateNested,
 } from "class-validator";
-import Address from "../entity/address.entity";
+
 import { Type } from "class-transformer";
-import CreateAddressDto from "./address.dto";
 import "reflect-metadata";
+import { CreateAddressDto, UpdateAddressDto } from "./address.dto";
 
 class CreateEmployeeDto {
     @IsNotEmpty()
@@ -30,4 +31,24 @@ class CreateEmployeeDto {
     address: CreateAddressDto;
 }
 
-export default CreateEmployeeDto;
+class UpdateEmployeeDto {
+    @IsOptional()
+    @IsString()
+    name: String;
+
+    @IsOptional()
+    @IsString()
+    @IsEmail()
+    email: String;
+
+    @IsOptional()
+    @IsNumber()
+    age: Number;
+
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => UpdateAddressDto)
+    address: UpdateAddressDto;
+}
+
+export { CreateEmployeeDto, UpdateEmployeeDto };
