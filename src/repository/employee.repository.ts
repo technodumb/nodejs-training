@@ -7,7 +7,6 @@ class EmployeeRepository {
     constructor(private employeeRepository: Repository<Employee>) {}
     
     async find(): Promise<Employee[]> {
-        // const employeeRepository = this.dataSource.getRepository(Employee);
         return this.employeeRepository.find({
             // relations: ["address"],
             relations: { address: true }, 
@@ -15,7 +14,6 @@ class EmployeeRepository {
     }
 
     async findOneBy(filter: Partial<Employee>): Promise<Employee> {
-        // const employeeRepository = this.dataSource.getRepository(Employee);
         return this.employeeRepository.findOne({
             where: filter,
             // relations: ["address"],
@@ -24,16 +22,14 @@ class EmployeeRepository {
     }
 
     async save(newEmployee: Employee): Promise<Employee> {
-        // const employeeRepository = this.dataSource.getRepository(Employee);
         return this.employeeRepository.save(newEmployee);
     }
 
     async count(filter: Partial<Employee>): Promise<number> {
-        // const employeeRepository = this.dataSource.getRepository(Employee);
         return this.employeeRepository.count({ where: filter });
     }
+
     async softDelete(filter: Partial<Employee>): Promise<UpdateResult> {
-        // const employeeRepository = this.dataSource.getRepository(Employee);
         return this.employeeRepository.softDelete(filter);
     }
 
