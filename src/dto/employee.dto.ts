@@ -1,11 +1,11 @@
 import {
-	IsEmail,
-	IsEnum,
-	IsNotEmpty,
-	IsNumber,
-	IsOptional,
-	IsString,
-	ValidateNested,
+    IsEmail,
+    IsEnum,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
+    ValidateNested,
 } from "class-validator";
 
 import { Type } from "class-transformer";
@@ -15,59 +15,95 @@ import { CreateDepartmentDto } from "./department.dto";
 import { Role } from "../utils/role.enum";
 
 class CreateEmployeeDto {
-	@IsNotEmpty()
-	@IsString()
-	name: string;
+    @IsNotEmpty()
+    @IsString()
+    name: string;
 
-	@IsNotEmpty()
-	@IsString()
-	@IsEmail()
-	email: string;
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    email: string;
 
-	@IsNotEmpty()
-	@IsNumber()
-	age: Number;
+    @IsNotEmpty()
+    @IsNumber()
+    age: number;
 
-	@IsNotEmpty()
-	@ValidateNested({ each: true })
-	@Type(() => CreateAddressDto)
-	address: CreateAddressDto;
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    @Type(() => CreateAddressDto)
+    address: CreateAddressDto;
 
-	@IsNotEmpty()
-	@IsString()
-	password: string;
+    @IsNotEmpty()
+    @IsString()
+    password: string;
 
-	@IsNotEmpty()
-	@IsEnum(Role)
-	role: Role;
+    @IsNotEmpty()
+    @IsEnum(Role)
+    role: Role;
 
-	@IsNotEmpty()
-	@IsString()
-	department: string;
+    @IsNotEmpty()
+    @IsString()
+    department: string;
 }
 
 class UpdateEmployeeDto {
-	@IsOptional()
-	@IsString()
-	name: string;
+    @IsOptional()
+    @IsString()
+    name: string;
 
-	@IsOptional()
-	@IsString()
-	@IsEmail()
-	email: string;
+    @IsOptional()
+    @IsString()
+    @IsEmail()
+    email: string;
 
-	@IsOptional()
-	@IsNumber()
-	age: Number;
+    @IsOptional()
+    @IsNumber()
+    age: number;
 
-	@IsOptional()
-	@ValidateNested({ each: true })
-	@Type(() => UpdateAddressDto)
-	address: UpdateAddressDto;
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => UpdateAddressDto)
+    address: UpdateAddressDto;
 
-	@IsOptional()
-	@IsString()
-	department: string;
+    @IsOptional()
+    @IsString()
+    password: string;
+
+    @IsOptional()
+    @IsEnum(Role)
+    role: Role;
+
+    @IsOptional()
+    @IsString()
+    department: string;
+}
+
+class ResponseEmployeeDto {
+    @IsNotEmpty()
+    @IsString()
+    name: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    email: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    age: number;
+
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    @Type(() => CreateAddressDto)
+    address: CreateAddressDto;
+
+    @IsNotEmpty()
+    @IsEnum(Role)
+    role: Role;
+
+    @IsNotEmpty()
+    @IsString()
+    department: string;
 }
 
 export { CreateEmployeeDto, UpdateEmployeeDto };
