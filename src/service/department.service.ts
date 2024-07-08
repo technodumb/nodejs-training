@@ -48,6 +48,9 @@ class DepartmentService {
 
 	deleteDepartment = async (id: number) => {
 		const existingDepartment = await this.getDepartmentByID(id);
+		if (existingDepartment.employees.length) {
+			throw new HttpException(400, "Non-empty departments cannot be deleted");
+		}
 		await this.departmentRepository.softRemove(existingDepartment);
 		return existingDepartment;
 	};
