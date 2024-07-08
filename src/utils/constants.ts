@@ -1,2 +1,6 @@
-export const JWT_SECRET = "ABCDE123";
-export const JWT_VALIDITY = "24H";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export const JWT_SECRET = process.env.JWT_SECRET;
+export const JWT_VALIDITY = process.env.JWT_VALIDITY;
