@@ -8,11 +8,14 @@ class DepartmentRepository {
 	//  = dataSource.getRepository(Department)
 
 	async findAll() {
-		return this.departmentRepository.find();
+		return this.departmentRepository.find({ relations: { employees: true } });
 	}
 
 	async findOneBy(filter: Partial<Department>) {
-		return this.departmentRepository.findOne({ where: filter });
+		return this.departmentRepository.findOne({
+			where: filter,
+			relations: { employees: true },
+		});
 	}
 
 	async save(newDepartment: Department) {

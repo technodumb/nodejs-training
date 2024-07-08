@@ -66,14 +66,14 @@ export class EmployeeController {
 		next: NextFunction
 	) => {
 		try {
-			const employeeDto = plainToInstance(CreateEmployeeDto, req.body);
-			const errors = await validate(employeeDto);
 			const role = req.role;
-
 			if (role !== Role.HR) {
 				// throw new IncorrectPasswordException(ErrorCodes.UNAUTHORIZED)
 				throw new HttpException(403, "Access Forbidden");
 			}
+
+			const employeeDto = plainToInstance(CreateEmployeeDto, req.body);
+			const errors = await validate(employeeDto);
 			if (errors.length) {
 				const errorString = "Validation Failed!";
 				throw new HttpException(400, errorString, errors);
@@ -85,7 +85,8 @@ export class EmployeeController {
 				employeeDto.age,
 				employeeDto.password,
 				employeeDto.role,
-				employeeDto.address
+				employeeDto.address,
+				employeeDto.department
 			);
 			res.status(201).send(savedEmployee);
 		} catch (error) {
@@ -119,7 +120,8 @@ export class EmployeeController {
 				employeeDto.email,
 				employeeDto.name,
 				employeeDto.age,
-				employeeDto.address
+				employeeDto.address,
+				employeeDto.department
 			);
 			res.status(200).send(updatedEmployee);
 		} catch (error) {

@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import dataSource from "../db/data-source.db";
 import Department from "../entity/department.entity";
 import DepartmentRepository from "../repository/department.repository";
+import HttpException from "../exception/http.exception";
 
 class DepartmentService {
-	// get, post, put, delete, patch
 	constructor(private departmentRepository: DepartmentRepository) {}
 	//  = new DepartmentRepository()
 
@@ -13,7 +13,24 @@ class DepartmentService {
 	};
 
 	getDepartmentByID = async (departmentID: number) => {
-		return this.departmentRepository.findOneBy({ id: departmentID });
+		const employee = await this.departmentRepository.findOneBy({
+			id: departmentID,
+		});
+		if (!employee) {
+			throw new HttpException(404, "Department Not Found");
+		}
+		return employee;
+	};
+
+	getDepartmentByName = async (departmentName: string) => {
+		// return this.departmentRepository.findOneBy({ name: departmentName });
+		const employee = await this.departmentRepository.findOneBy({
+			name: departmentName,
+		});
+		if (!employee) {
+			throw new HttpException(404, "Department Not Found");
+		}
+		return employee;
 	};
 
 	createDepartment = async (name: string) => {
