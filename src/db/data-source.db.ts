@@ -4,7 +4,6 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import dotenv from "dotenv";
 
 dotenv.config();
-console.log(process.env.PASSWORD);
 
 const dataSource = new DataSource({
     type: "postgres",
