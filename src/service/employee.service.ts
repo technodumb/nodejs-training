@@ -90,6 +90,7 @@ export class EmployeeService {
 			existingEmployee.address.line1 = address.line1;
 			existingEmployee.address.pincode = address.pincode;
 		}
+		existingEmployee.department = department;
 
 		console.log("errorString");
 
