@@ -13,7 +13,10 @@ class Employee extends AbstractEntity {
         address: Address,
         department: Department,
         password: string,
-        role: Role
+        role: Role,
+        joiningDate: Date,
+        status: string,
+        experience: number
     ) {
         super();
         this.name = name;
@@ -23,6 +26,9 @@ class Employee extends AbstractEntity {
         this.password = password;
         this.address = address;
         this.department = department;
+        this.joiningDate = joiningDate;
+        this.status = status;
+        this.experience = experience;
     }
 
     @Column()
@@ -34,17 +40,29 @@ class Employee extends AbstractEntity {
     @Column()
     age: number;
 
-    @OneToOne(() => Address, (address) => address.employee)
+    @OneToOne(() => Address, (address) => address.employee, {
+        cascade: true,
+        onDelete: "CASCADE",
+    })
     address: Address;
 
     @ManyToOne(() => Department, (department) => department.employees)
     department: Department;
 
-    @Column({ nullable: true })
+    @Column()
     password: string;
 
-    @Column({ nullable: true })
+    @Column()
     role: Role;
+
+    @Column()
+    joiningDate: Date;
+
+    @Column()
+    status: string;
+
+    @Column()
+    experience: number;
 }
 
 export default Employee;
