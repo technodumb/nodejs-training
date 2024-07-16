@@ -2,7 +2,11 @@ import { plainToInstance } from "class-transformer";
 import HttpException from "../exception/http.exception";
 import { EmployeeService } from "../service/employee.service";
 import { Router, Request, Response, NextFunction } from "express";
-import { CreateEmployeeDto, UpdateEmployeeDto } from "../dto/employee.dto";
+import {
+    CreateEmployeeDto,
+    ResponseEmployeeDto,
+    UpdateEmployeeDto,
+} from "../dto/employee.dto";
 import { validate } from "class-validator";
 import { RequestWithUser } from "../utils/requestWithUser";
 import { Role } from "../utils/role.enum";
@@ -32,6 +36,11 @@ export class EmployeeController {
                 throw new HttpException(403, "Access Forbidden");
             }
             const employees = await this.employeeService.getAllEmployees();
+
+            // const employeeResponseDTO = plainToInstance(
+            //     ResponseEmployeeDto,
+            //     employees
+            // );
             res.status(200).send(employees);
         } catch (error) {
             next(error);
@@ -75,6 +84,7 @@ export class EmployeeController {
             }
 
             const employeeDto = plainToInstance(CreateEmployeeDto, req.body);
+            console.log(employeeDto);
             const errors = await validate(employeeDto);
             if (errors.length) {
                 const errorString = "Validation Failed!";
@@ -88,7 +98,10 @@ export class EmployeeController {
                 employeeDto.password,
                 employeeDto.role,
                 employeeDto.address,
-                employeeDto.department
+                employeeDto.department,
+                employeeDto.joiningDate,
+                employeeDto.status,
+                employeeDto.experience
             );
             res.status(201).send(savedEmployee);
         } catch (error) {
@@ -126,7 +139,10 @@ export class EmployeeController {
                     employeeDto.password,
                     employeeDto.role,
                     employeeDto.address,
-                    employeeDto.department
+                    employeeDto.department,
+                    employeeDto.joiningDate,
+                    employeeDto.status,
+                    employeeDto.experience
                 );
             res.status(200).send(updatedEmployee);
         } catch (error) {

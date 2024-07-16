@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import { jwtPayload } from "../utils/jwtPayload";
 import { JWT_SECRET, JWT_VALIDITY } from "../utils/constants";
-import { DepartmentNotFoundException } from "../exception/notFound.exception";
+import { DepartmentNameNotFoundException } from "../exception/notFound.exception";
 import DepartmentService from "./department.service";
 
 export class EmployeeService {
@@ -41,7 +41,10 @@ export class EmployeeService {
         password: string,
         role: Role,
         address: CreateAddressDto,
-        departmentName: string
+        departmentName: string,
+        joiningDate: Date,
+        status: string,
+        experience: number
     ) => {
         const department = await this.departmentService.getDepartmentByName(
             departmentName
@@ -62,9 +65,11 @@ export class EmployeeService {
             newAddress,
             department,
             passwordHash,
-            role
+            role,
+            joiningDate,
+            status,
+            experience
         );
-        // newEmployee.address = newAddress;
 
         // console.log(newEmployee);
 
@@ -80,14 +85,17 @@ export class EmployeeService {
         password: string,
         role: Role,
         address: UpdateAddressDto,
-        departmentName: string
+        departmentName: string,
+        joiningDate: Date,
+        status: string,
+        experience: number
     ) => {
         const department = await this.departmentService.getDepartmentByName(
             departmentName
         );
 
         if (!department) {
-            throw new DepartmentNotFoundException(departmentName);
+            throw new DepartmentNameNotFoundException(departmentName);
         }
         const existingEmployee = await this.getEmployeeByID(id);
         existingEmployee.name = name;
@@ -124,7 +132,7 @@ export class EmployeeService {
 
         const result = await bcrypt.compare(password, employee.password);
         if (!result) {
-            console.log(employee.password, await bcrypt.hash(password, 10));
+            // console.log(employee.password, await bcrypt.hash(password, 10));
             throw new HttpException(403, "Incorrect Username or Password");
         }
 

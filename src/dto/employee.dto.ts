@@ -1,10 +1,13 @@
 import {
+    IsDate,
+    IsDateString,
     IsEmail,
     IsEnum,
     IsNotEmpty,
     IsNumber,
     IsOptional,
     IsString,
+    IsUUID,
     ValidateNested,
 } from "class-validator";
 
@@ -44,6 +47,18 @@ class CreateEmployeeDto {
     @IsNotEmpty()
     @IsString()
     department: string;
+
+    @IsNotEmpty()
+    @IsDateString()
+    joiningDate: Date;
+
+    @IsNotEmpty()
+    @IsString()
+    status: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    experience: number;
 }
 
 class UpdateEmployeeDto {
@@ -76,34 +91,62 @@ class UpdateEmployeeDto {
     @IsOptional()
     @IsString()
     department: string;
+
+    @IsOptional()
+    @IsDateString()
+    joiningDate: Date;
+
+    @IsOptional()
+    @IsString()
+    status: string;
+
+    @IsOptional()
+    @IsNumber()
+    experience: number;
 }
 
 class ResponseEmployeeDto {
     @IsNotEmpty()
+    @IsUUID()
+    emp_id: string;
+
+    @IsNotEmpty()
     @IsString()
-    name: string;
+    emp_name: string;
 
     @IsNotEmpty()
     @IsString()
     @IsEmail()
-    email: string;
+    emp_email: string;
 
     @IsNotEmpty()
     @IsNumber()
-    age: number;
+    emp_age: number;
 
     @IsNotEmpty()
     @ValidateNested({ each: true })
     @Type(() => CreateAddressDto)
-    address: CreateAddressDto;
+    emp_addr: CreateAddressDto;
 
     @IsNotEmpty()
     @IsEnum(Role)
-    role: Role;
+    emp_role: Role;
 
     @IsNotEmpty()
     @IsString()
-    department: string;
+    emp_dept: string;
+
+    @IsNotEmpty()
+    @IsDateString()
+    emp_join: Date;
+
+    @IsNotEmpty()
+    @IsString()
+    emp_status: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    emp_exp: number;
 }
 
-export { CreateEmployeeDto, UpdateEmployeeDto };
+export { CreateEmployeeDto, UpdateEmployeeDto, ResponseEmployeeDto };

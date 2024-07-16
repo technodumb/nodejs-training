@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
-import dataSource from "../db/data-source.db";
 import Department from "../entity/department.entity";
 import DepartmentRepository from "../repository/department.repository";
 import HttpException from "../exception/http.exception";
-import { EmployeeNotFoundException } from "../exception/notFound.exception";
+import {
+    DepartmentIDNotFoundException,
+    DepartmentNameNotFoundException,
+} from "../exception/notFound.exception";
 
 class DepartmentService {
     constructor(private departmentRepository: DepartmentRepository) {}
@@ -18,7 +19,7 @@ class DepartmentService {
             id: departmentID,
         });
         if (!employee) {
-            throw new EmployeeNotFoundException(departmentID);
+            throw new DepartmentIDNotFoundException(departmentID);
         }
         return employee;
     };
@@ -29,7 +30,7 @@ class DepartmentService {
             name: departmentName,
         });
         if (!employee) {
-            throw new HttpException(404, "Department Not Found");
+            throw new DepartmentNameNotFoundException(departmentName);
         }
         return employee;
     };

@@ -6,10 +6,20 @@ class EmployeeNotFoundException extends HttpException {
     }
 }
 
-class DepartmentNotFoundException extends HttpException {
+class DepartmentIDNotFoundException extends HttpException {
+    constructor(private departmentID: number) {
+        super(404, `Department #'${departmentID}' does not exist`);
+    }
+}
+
+class DepartmentNameNotFoundException extends HttpException {
     constructor(private departmentName: string) {
         super(404, `Department '${departmentName}' does not exist`);
     }
 }
 
-export { EmployeeNotFoundException, DepartmentNotFoundException };
+export {
+    EmployeeNotFoundException,
+    DepartmentNameNotFoundException,
+    DepartmentIDNotFoundException,
+};
