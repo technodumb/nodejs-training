@@ -21,14 +21,7 @@ const authorize = async (
             );
         }
 
-        // const payload = jsonwebtoken.verify(token, JWT_SECRET) as jwtPayload;
-
-        // to add the first user with privilege to create employees
-        const payload = {
-            name: "test",
-            email: "test@test.com",
-            role: Role.HR,
-        };
+        const payload = jsonwebtoken.verify(token, JWT_SECRET) as jwtPayload;
 
         req.name = payload.name;
         req.email = payload.email;

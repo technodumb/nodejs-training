@@ -5,7 +5,7 @@ import {
     IsString,
 } from "class-validator";
 
-class CreateAddressDto {
+class   CreateAddressDto {
     @IsNotEmpty()
     @IsString()
     line1: string;

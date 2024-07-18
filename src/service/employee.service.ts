@@ -112,6 +112,10 @@ export class EmployeeService {
         }
 
         existingEmployee.department = department;
+        existingEmployee.joiningDate = joiningDate;
+        existingEmployee.role = role;
+        existingEmployee.experience = experience;
+        existingEmployee.status = status;
 
         console.log("errorString");
 

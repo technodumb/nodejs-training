@@ -119,6 +119,7 @@ export class EmployeeController {
             if (!employeeID) {
                 throw new HttpException(400, "ID is not an integer!");
             }
+            console.log(req.body);
             const employeeDto = plainToInstance(UpdateEmployeeDto, req.body);
             const errors = await validate(employeeDto);
             const role = req.role;
